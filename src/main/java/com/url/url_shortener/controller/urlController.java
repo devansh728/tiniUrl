@@ -4,6 +4,7 @@ import com.url.url_shortener.dto.ClickEventDTO;
 import com.url.url_shortener.dto.MappingRequest;
 import com.url.url_shortener.dto.UrlMappingDto;
 import com.url.url_shortener.models.Users;
+import com.url.url_shortener.repository.UrlMappingRepository;
 import com.url.url_shortener.security.jwt.JwtAuthenticationResponse;
 import com.url.url_shortener.service.UrlMappingService;
 import com.url.url_shortener.service.UserService;
