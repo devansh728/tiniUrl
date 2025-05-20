@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoIosMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { FaLink } from "react-icons/fa";
+import { useStoreContext } from '../contextApi/ContextApi';
 
 const NavBar = () => {
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { token, setToken } = useStoreContext(); // Destructure setToken from context
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +26,13 @@ const NavBar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("JWT_TOKEN"); // Remove token from localStorage
+    setToken(null); // Clear token from context
+    navigate("/login"); // Redirect to login page
+    setNavbarOpen(false); // Close mobile menu if open
+  };
 
   return (
     <div className={`h-16 ${scrolled ? 'bg-white shadow-md text-gray-800' : 'bg-transparent text-white'} z-50 flex items-center sticky top-0 transition-all duration-300`}>
@@ -66,32 +75,44 @@ const NavBar = () => {
               About
             </Link>
           </li>
-          <li className="font-medium transition-all duration-150">
-            <Link
-              className={`${
-                path === "/dashboard" 
-                  ? `${scrolled ? 'text-blue-600 font-semibold' : 'text-white font-semibold'}` 
-                  : `${scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-200 hover:text-white'}`
-              }`}
-              to="/dashboard"
-              onClick={() => setNavbarOpen(false)}
-            >
-              Dashboard
-            </Link>
-          </li>
+          {token && (
+            <li className="font-medium transition-all duration-150">
+              <Link
+                className={`${
+                  path === "/dashboard" 
+                    ? `${scrolled ? 'text-blue-600 font-semibold' : 'text-white font-semibold'}` 
+                    : `${scrolled ? 'text-gray-700 hover:text-blue-600' : 'text-gray-200 hover:text-white'}`
+                }`}
+                to="/dashboard"
+                onClick={() => setNavbarOpen(false)}
+              >
+                Dashboard
+              </Link>
+            </li>
+          )}
           
           <div className="flex sm:flex-row flex-col sm:gap-3 gap-2">
-            <Link to="/login" onClick={() => setNavbarOpen(false)}>
-              <button className="sm:ml-0 -ml-1 border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-600 hover:text-white cursor-pointer w-24 text-center font-medium px-2 py-2 rounded-md transition-all duration-300">
-                Login
+            {!token ? (
+              <>
+                <Link to="/login" onClick={() => setNavbarOpen(false)}>
+                  <button className="sm:ml-0 -ml-1 border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-600 hover:text-white cursor-pointer w-24 text-center font-medium px-2 py-2 rounded-md transition-all duration-300">
+                    Login
+                  </button>
+                </Link>
+                <Link to="/register" onClick={() => setNavbarOpen(false)}>
+                  <button className="sm:ml-0 -ml-1 bg-blue-600 text-white cursor-pointer w-24 text-center font-medium px-2 py-2 rounded-md hover:bg-blue-700 transition-all duration-300">
+                    Sign Up
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <button 
+                onClick={handleLogout}
+                className="sm:ml-0 -ml-1 border border-red-600 text-red-600 bg-transparent hover:bg-red-600 hover:text-white cursor-pointer w-24 text-center font-medium px-2 py-2 rounded-md transition-all duration-300"
+              >
+                Logout
               </button>
-            </Link>
-            
-            <Link to="/register" onClick={() => setNavbarOpen(false)}>
-              <button className="sm:ml-0 -ml-1 bg-blue-600 text-white cursor-pointer w-24 text-center font-medium px-2 py-2 rounded-md hover:bg-blue-700 transition-all duration-300">
-                Sign Up
-              </button>
-            </Link>
+            )}
           </div>
         </ul>
         

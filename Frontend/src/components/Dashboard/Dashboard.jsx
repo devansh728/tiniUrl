@@ -1,66 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaLink, FaChartLine, FaEye, FaPlus } from 'react-icons/fa';
-
-// Mock data for frontend-only testing
-const mockLinks = [
-  {
-    id: 1,
-    originalUrl: 'https://example.com/very/long/url/that/needs/shortening/for/social/media/posts',
-    shortUrl: 'link.ly/abc123',
-    clicks: 42,
-    createdAt: '2023-05-15T10:30:00'
-  },
-  {
-    id: 2,
-    originalUrl: 'https://google.com/search?q=react+frontend+development+best+practices+for+2023',
-    shortUrl: 'link.ly/def456',
-    clicks: 17,
-    createdAt: '2023-05-16T14:20:00'
-  },
-  {
-    id: 3,
-    originalUrl: 'https://github.com/facebook/react/blob/main/CHANGELOG.md',
-    shortUrl: 'link.ly/ghi789',
-    clicks: 105,
-    createdAt: '2023-05-17T09:15:00'
-  }
-];
+import { useStoreContext } from '../../contextApi/ContextApi';
+import api from '../../api/api';
 
 const Dashboard = () => {
-  const [links, setLinks] = useState(mockLinks);
+  const [links, setLinks] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newUrl, setNewUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { token } = useStoreContext();
 
-  const handleCreateLink = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      const newLink = {
-        id: links.length + 1,
-        originalUrl: newUrl,
-        shortUrl: `link.ly/${Math.random().toString(36).substring(2, 8)}`,
-        clicks: 0,
-        createdAt: new Date().toISOString()
-      };
-      
-      setLinks([newLink, ...links]);
-      setNewUrl('');
-      setShowCreateModal(false);
-      setIsLoading(false);
-    }, 1000);
+  // Fetch existing links when component mounts
+  useEffect(() => {
+  const fetchLinks = async () => {
+    try {
+      const response = await api.get('/api/urls/myurls', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      // Map the API response to match your frontend structure
+      const formattedLinks = response.data.map(link => ({
+        id: link.id,
+        originalUrl: link.originalUrl,
+        shortUrl: link.shortUrl,
+        clicks: link.clickCount,  // Map clickCount to clicks
+        createdAt: link.createdDate // Map createdDate to createdAt
+      }));
+
+      setLinks(formattedLinks);
+    } catch (error) {
+      console.error('Error fetching links:', error);
+      // Optional: Add user feedback (toast/alert)
+    }
   };
 
-  const formatDate = (dateString) => {
+  if (token) {
+    fetchLinks();
+  }
+}, [token]); // token is the only dependency needed
+
+  const handleCreateLink = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  
+  try {
+    const response = await api.post(
+      '/api/urls/shortenUrl',
+      { originalUrl: newUrl },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    // Map the response properly using the exact field names from your DTO
+    const newLink = {
+      id: response.data.id,
+      originalUrl: response.data.originalUrl,
+      shortUrl: response.data.shortUrl,
+      clicks: response.data.clickCount,  // Make sure this matches your DTO
+      createdAt: response.data.createdDate // Make sure this matches your DTO
+    };
+
+    setLinks([newLink, ...links]);
+    setNewUrl('');
+    setShowCreateModal(false);
+  } catch (error) {
+    console.error('Error creating short link:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+// Update the date formatting function
+const formatDate = (dateString) => {
+  try {
+    // Parse the ISO string and format it
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date');
+    }
+    return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return 'Invalid date';
+  }
+};
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-50 py-8">

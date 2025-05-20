@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Card from "./Card";
 import { FaLink, FaChartLine, FaShieldAlt, FaBolt } from "react-icons/fa";
+import { useStoreContext } from '../contextApi/ContextApi';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { token } = useStoreContext();
 
   const dashBoardNavigateHandler = () => {
-    navigate("/dashboard");
+    navigate("/about");
   };
 
   return (
@@ -131,12 +133,20 @@ const LandingPage = () => {
             <p className="max-w-2xl mx-auto mb-8">
               Join thousands of users who are already enjoying the benefits of Linklytics. Start shortening your URLs today!
             </p>
+            { !token ? (
             <button 
               onClick={() => navigate("/register")}
               className="bg-white text-blue-600 hover:bg-gray-100 font-medium rounded-full px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Sign Up For Free
             </button>
+            ) : (
+               <button 
+              onClick={() => navigate("/dashboard")}
+              className="bg-white text-blue-600 hover:bg-gray-100 font-medium rounded-full px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Create Link
+            </button> )}
           </motion.div>
         </div>
       </div>
