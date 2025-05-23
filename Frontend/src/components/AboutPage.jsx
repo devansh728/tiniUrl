@@ -14,7 +14,7 @@ const AboutPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center max-w-3xl mx-auto"
                     >
-                        <h1 className="text-4xl md:text-5xl font-bold mb-6">About Linklytics</h1>
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6">About Linkly</h1>
                         <p className="text-lg text-gray-100 leading-relaxed">
                             We're on a mission to simplify link sharing and provide powerful analytics 
                             to help you make data-driven decisions about your online content.
@@ -36,7 +36,7 @@ const AboutPage = () => {
                         >
                             <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Features</h2>
                             <p className="text-gray-600">
-                                Discover what makes Linklytics the preferred choice for URL shortening and analytics.
+                                Discover what makes Linkly the preferred choice for URL shortening and analytics.
                             </p>
                         </motion.div>
 
@@ -153,7 +153,7 @@ const AboutPage = () => {
                     >
                         <h2 className="text-3xl font-bold text-gray-800 mb-4">Our Mission</h2>
                         <p className="text-gray-600 max-w-3xl mx-auto">
-                            At Linklytics, we believe in making the web more accessible and measurable. 
+                            At Linkly, we believe in making the web more accessible and measurable. 
                             Our goal is to provide tools that help individuals and businesses optimize 
                             their online presence through simplified link management and data-driven insights.
                         </p>
@@ -173,7 +173,7 @@ const AboutPage = () => {
                             <h3 className="text-xl font-bold text-gray-800 mb-2">Join Our Community</h3>
                             <p className="text-gray-600 mb-4">
                                 Become part of our growing community of marketers, content creators, and businesses 
-                                who are leveraging Linklytics to improve their online presence.
+                                who are leveraging Linkly to improve their online presence.
                             </p>
                             <button 
                                 onClick={() => {}}

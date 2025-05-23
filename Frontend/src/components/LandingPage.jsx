@@ -36,7 +36,7 @@ const LandingPage = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-gray-100 my-6 lg:w-[90%] md:w-[85%] leading-relaxed"
               >
-                Linklytics streamlines the process of URL shortening, making sharing
+                Linkly streamlines the process of URL shortening, making sharing
                 links effortless and efficient. With our powerful analytics, you can track
                 performance and optimize your sharing strategy.
               </motion.p>
@@ -88,7 +88,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Choose Linklytics?</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Choose Linkly?</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Trusted by individuals and teams at the world's best companies to simplify link sharing and gain valuable insights.
             </p>
@@ -131,7 +131,7 @@ const LandingPage = () => {
           >
             <h2 className="text-3xl font-bold mb-4">Ready to simplify your links?</h2>
             <p className="max-w-2xl mx-auto mb-8">
-              Join thousands of users who are already enjoying the benefits of Linklytics. Start shortening your URLs today!
+              Join thousands of users who are already enjoying the benefits of Linkly. Start shortening your URLs today!
             </p>
             { !token ? (
             <button 

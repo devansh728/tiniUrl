@@ -10,7 +10,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <FaLink className="text-blue-400 text-xl" />
-              <h2 className="text-2xl font-bold">Linklytics</h2>
+              <h2 className="text-2xl font-bold">Linkly</h2>
             </div>
             <p className="text-gray-400 mb-4">
               Simplifying URL shortening for efficient sharing and powerful analytics.
@@ -65,7 +65,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <FaEnvelope className="text-blue-400" />
-                <span className="text-gray-400">support@linklytics.com</span>
+                <span className="text-gray-400">support@Linkly.com</span>
               </li>
             </ul>
           </div>
@@ -73,7 +73,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-800 pt-8 mt-8 text-center md:flex md:justify-between md:text-left">
           <p className="text-gray-500">
-            &copy; {new Date().getFullYear()} Linklytics. All rights reserved.
+            &copy; {new Date().getFullYear()} Linkly. All rights reserved.
           </p>
           <p className="text-gray-500 mt-2 md:mt-0">
             Designed with ❤️ for a better web

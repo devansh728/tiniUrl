@@ -1,13 +1,17 @@
 package com.url.url_shortener.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.url.url_shortener.dto.ClickEventDTO;
+import com.url.url_shortener.dto.KafkaValue;
 import com.url.url_shortener.dto.UrlMappingDto;
 import com.url.url_shortener.models.ClickEvent;
 import com.url.url_shortener.models.Urlmapping;
 import com.url.url_shortener.models.Users;
 import com.url.url_shortener.repository.ClickEventRepository;
 import com.url.url_shortener.repository.UrlMappingRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,14 +26,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UrlMappingService {
 
-    // Remove these fields - they should not be injected
-    // private UrlMappingDto dto;
-    // private Urlmapping urlmapping;
+    private final UrlMappingRepository urlMappingRepository;
+    private final ClickEventRepository clickEventRepository;
+    private final KafkaProducer Kafkaproducer;
 
-    private UrlMappingRepository urlMappingRepository;
-    private ClickEventRepository clickEventRepository;
-
-    public UrlMappingDto createShortUrl(String longUrl, Users user){
+    public UrlMappingDto createShortUrl(String longUrl, Users user) {
         String rand = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         StringBuilder builder = new StringBuilder(8);
         Random random = new Random();
@@ -56,6 +57,14 @@ public class UrlMappingService {
         dto.setClickCount(savedurlmapping.getClickCount());
         dto.setId(savedurlmapping.getId());
 
+        int totalLinks = urlMappingRepository.getTotalUrlCountByUserId(user.getId());
+
+        if (totalLinks > 0 && totalLinks % 30 == 0) {
+            KafkaValue kafkaDto = new KafkaValue();
+            kafkaDto.setUser(user);
+            kafkaDto.setTotalClicks(totalLinks);
+            Kafkaproducer.sendMessage(kafkaDto);
+        }
         return dto;
     }
 

@@ -40,7 +40,7 @@ const NavBar = () => {
         <Link to="/" className="flex items-center gap-2">
           <FaLink className={`text-2xl ${scrolled ? 'text-blue-600' : 'text-white'}`} />
           <h1 className={`font-bold text-2xl ${scrolled ? 'text-blue-600' : 'text-white'} font-montserrat sm:mt-0 mt-0`}>
-            Linklytics
+            Linkly
           </h1>
         </Link>
         
